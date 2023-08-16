@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Snackbar, Grid, IconButton } from '@mui/material';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import { SnackbarCloseReason } from '@mui/material/Snackbar';
+import { Grid, IconButton } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
+import { useError } from './ErrorContext';
 const podcastBackendUrl = 'http://localhost:5000';
-
-function Alert(props: AlertProps) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 
 interface Podcast {
   id: number;
@@ -19,8 +14,7 @@ interface Podcast {
 
 const Podcasts: React.FC = () => {
   const [podcasts, setPodcasts] = useState<Podcast[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [open, setOpen] = useState(false);
+  const { showError } = useError();
 
   useEffect(() => {
     fetch(`${podcastBackendUrl}/api/podcasts`)
@@ -30,17 +24,13 @@ const Podcasts: React.FC = () => {
         }
         return res.json();
       })
-      .then((data) => setPodcasts(data))
-      .catch((err) => setError(err.message));
+      .then((data) =>  {
+        setPodcasts(data);
+      })
+      .catch((err) => {
+        showError(err.message || 'An unexpected error occurred');
+      });
   }, []);
-
-  const handleClose = (event: React.SyntheticEvent<any> | Event, reason?: SnackbarCloseReason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setError(null);
-  };
 
   return (
     <div>
@@ -54,8 +44,8 @@ const Podcasts: React.FC = () => {
                 style={{ width: '100%', maxWidth: '200px', height: 'auto' }}
               />
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <h3>{podcast.name}</h3>
-              <IconButton
+                <h3>{podcast.name}</h3>
+                <IconButton
                   size="small"
                   onClick={() => window.open(podcast.html_url, '_blank')}
                   aria-label="Open in new tab"
@@ -63,16 +53,10 @@ const Podcasts: React.FC = () => {
                   <OpenInNewIcon fontSize="small" />
                 </IconButton>
               </div>
-              {/* You can add a player or link to the podcast here */}
             </div>
           </Grid>
         ))}
       </Grid>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error">
-          {error || 'An unexpected error occurred'}
-        </Alert>
-      </Snackbar>
     </div>
   );
 };
