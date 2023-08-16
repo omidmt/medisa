@@ -36,3 +36,14 @@
     transform: rotate(360deg);
   }
 }
+
+.podcast-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.episode-details {
+  margin-left: 8px;
+}

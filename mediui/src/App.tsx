@@ -1,4 +1,3 @@
-// src/App.tsx
 import React, { useState } from 'react';
 import { Drawer, AppBar, Toolbar, IconButton, List, ListItem, ListItemText, CssBaseline, ThemeProvider, createTheme, ListItemIcon, Divider } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -9,6 +8,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
 import Podcasts from './components/Podcasts';
 import { ErrorProvider } from './components/ErrorContext';
+import Podcast from './components/Podcast';
+import './App.css'
 
 interface ErrorMessageProps {
   message: string;
@@ -79,9 +80,10 @@ const App: React.FC = () => {
               ))}
             </List>
           </Drawer>
-          <main style={{ marginLeft: open ? 240 : 0, marginTop: 64, paddingTop: 64, paddingLeft: 16 }}>
+          <main style={{ marginLeft: open ? 150 : 0, marginTop: 64, paddingTop: 64, paddingLeft: 16, paddingRight: 16 }}>
             <Routes>
               <Route path="/podcasts" element={<Podcasts />} />
+              <Route path="/podcast/:podcastId" element={<Podcast />} />
               {/* Add other routes for Music, Video, and Settings here */}
             </Routes>
           </main >

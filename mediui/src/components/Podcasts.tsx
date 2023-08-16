@@ -3,6 +3,7 @@ import { Grid, IconButton } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 import { useError } from './ErrorContext';
+import { Link } from 'react-router-dom';
 const podcastBackendUrl = 'http://localhost:5000';
 
 interface Podcast {
@@ -24,7 +25,7 @@ const Podcasts: React.FC = () => {
         }
         return res.json();
       })
-      .then((data) =>  {
+      .then((data) => {
         setPodcasts(data);
       })
       .catch((err) => {
@@ -38,13 +39,17 @@ const Podcasts: React.FC = () => {
         {podcasts.map((podcast) => (
           <Grid item xs={12} sm={6} md={4} key={podcast.id}>
             <div style={{ textAlign: 'center' }}>
-              <img
-                src={podcast.image_url}
-                alt={podcast.name}
-                style={{ width: '100%', maxWidth: '200px', height: 'auto' }}
-              />
+              <Link to={`/podcast/${podcast.id}`}>
+                <img
+                  src={podcast.image_url}
+                  alt={podcast.name}
+                  style={{ width: '100%', maxWidth: '200px', height: 'auto' }}
+                />
+              </Link>
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <h3>{podcast.name}</h3>
+                <Link to={`/podcast/${podcast.id}`}>
+                  <h3>{podcast.name}</h3>
+                </Link>
                 <IconButton
                   size="small"
                   onClick={() => window.open(podcast.html_url, '_blank')}
